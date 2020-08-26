@@ -388,10 +388,11 @@ export default class ERest<T = DEFAULT_HANDLER> {
   /**
    * 获取分组API实例
    */
-  public group(name: string): IGruop<T> {
-    debug("using group: %s", name);
+  public group(name: string, desc?: string): IGruop<T> {
+    debug("using group: %s, desc: %s", name, desc);
     // assert(this.groupInfo[name], `请先配置 ${name} 分组`);
     const prefix = (this.groupInfo[name] || {}).prefix;
+    this.groups[name] = desc || "";
     const group = {
       get: (path: string) => this.registAPI("get", path, name, prefix),
       post: (path: string) => this.registAPI("post", path, name, prefix),
@@ -408,6 +409,7 @@ export default class ERest<T = DEFAULT_HANDLER> {
         return group;
       },
     };
+    this.groupInfo[name] = { name, middleware: [], before: [] };
     return group;
   }
 
