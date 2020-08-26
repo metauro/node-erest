@@ -55,7 +55,6 @@ export function schemaChecker<T extends Record<string, any>>(
   const { error } = ctx.privateInfo;
   const schemaInfo = schema instanceof SchemaType ? schema : ctx.schema.create(schema);
   const { ok, value, message, invalidParamaters, missingParamaters, invalidParamaterTypes } = schemaInfo.value(data);
-
   if (!ok) {
     if (missingParamaters && missingParamaters.length > 0) throw error.missingParameter(`'${missingParamaters[0]}'`);
     if (invalidParamaters && invalidParamaters.length > 0) {
@@ -100,20 +99,24 @@ export function apiParamsCheck(
   schema: API<any>,
   params?: Record<string, any>,
   query?: Record<string, any>,
-  body?: Record<string, any>
+  body?: Record<string, any>,
+  request?: any
 ) {
   const { error } = ctx.privateInfo;
   const newParams: Record<string, any> = {};
   if (schema.options.params && params) {
     const res = schemaChecker(ctx, params, schema.options.params);
+    if (request) Object.assign(request.params, res);
     Object.assign(newParams, res);
   }
   if (schema.options.query && query) {
     const res = schemaChecker(ctx, query, schema.options.query);
+    if (request) Object.assign(request.query, res);
     Object.assign(newParams, res);
   }
   if (schema.options.body && body) {
     const res = schemaChecker(ctx, body, schema.options.body);
+    if (request) Object.assign(request.body, res);
     Object.assign(newParams, res);
   }
 

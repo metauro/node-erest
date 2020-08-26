@@ -433,7 +433,14 @@ export default class ERest<T = DEFAULT_HANDLER> {
 
   public checkerLeiWeb<K>(ereat: ERest<T>, schema: API): (ctx: K) => void {
     return function apiParamsChecker(ctx: any) {
-      ctx.request.$params = apiParamsCheck(ereat, schema, ctx.request.params, ctx.request.query, ctx.request.body);
+      ctx.request.$params = apiParamsCheck(
+        ereat,
+        schema,
+        ctx.request.params,
+        ctx.request.query,
+        ctx.request.body,
+        ctx.request
+      );
       ctx.next();
     };
   }
