@@ -1,6 +1,6 @@
 {
-  "name": "erest",
-  "version": "1.11.7",
+  "name": "@gz/erest",
+  "version": "1.12.0",
   "description": "Easy to build api server depend on lei-web and express.",
   "main": "dist/lib/index.js",
   "typings": "dist/lib/index.d.ts",
